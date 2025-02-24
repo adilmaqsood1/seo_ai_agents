@@ -4,8 +4,6 @@ This project is an **AI-powered SEO analysis tool** that crawls websites, extrac
 1. **Agent 1**: Crawls websites and extracts keywords (like an SEO bot).
 2. **Agent 2**: Analyzes keywords using Groq's LLM and generates a detailed SEO report.
 
-The application is deployed on **Vercel** and can be accessed via API endpoints.
-
 ---
 
 ## **Features**
@@ -18,7 +16,6 @@ The application is deployed on **Vercel** and can be accessed via API endpoints.
   - Competitor gap analysis.
   - Actionable next steps.
 - **FastAPI Backend**: Provides a RESTful API for easy integration.
-- **Vercel Deployment**: Deployed on Vercel for scalability and ease of use.
 
 ---
 
@@ -153,7 +150,7 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 ## **Acknowledgments**
 - **FastAPI** for the backend framework.
 - **Groq API** for advanced keyword analysis.
-- **Vercel** for deployment and hosting.
+- **Koyeb** for deployment and hosting.
 
 ---
 
