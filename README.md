@@ -109,28 +109,6 @@ curl -X POST "http://127.0.0.1:8000/crawl" -H "Content-Type: application/json" -
 
 ---
 
-## **Deployment on Vercel**
-
-### **1. Install Vercel CLI**
-```bash
-npm install -g vercel
-```
-
-### **2. Deploy to Vercel**
-Run the following command in the project directory:
-```bash
-vercel
-```
-Follow the prompts to link your project and deploy it.
-
-### **3. Set Environment Variables**
-Add your `GROQ_API_KEY` in the Vercel dashboard under **Settings > Environment Variables**.
-
-### **4. Access the Deployed App**
-Once deployed, Vercel will provide a URL for your app. Test the `/crawl` endpoint using the provided URL.
-
----
-
 ## **Project Structure**
 ```
 ai_seo_agent/
