@@ -39,9 +39,22 @@ document.addEventListener('DOMContentLoaded', function() {
             // Process and display results
             displayResults(result.data);
             
-            // Show results section
+            // Show results section with animation
             resultsSection.classList.remove('hidden');
             noResultsSection.classList.add('hidden');
+            
+            // Add staggered fade-in animation to results sections
+            const resultElements = resultsSection.querySelectorAll('.bg-white');
+            resultElements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, 100 * (index + 1));
+            });
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while analyzing the website. Please try again.');
