@@ -58,4 +58,5 @@ class GroqKeywordAnalyzer:
 
         # Extract the analysis from the response
         analysis = response.choices[0].message.content
+        print("Groq API response:", analysis)  # Add logging to see the raw response
         return analysis

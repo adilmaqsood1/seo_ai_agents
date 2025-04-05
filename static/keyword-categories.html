@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyword Categories</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/category-display.css">
+</head>
+<body class="bg-gray-50 p-4">
+    <div class="container mx-auto">
+        <h2 class="text-2xl font-bold text-dark mb-6">Keyword Categories</h2>
+        
+        <div id="keywordCategoriesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Categories will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script src="/static/js/category-display.js"></script>
+    <script>
+        // Sample data structure matching the user's input
+        const sampleCategories = {
+            "Brand & Team": [
+                "BankalHabib",
+                "cmd_ahps@bankalhabib.com",
+                "dodhiya@bankalhabib.com",
+                "ismail.khan@bankalhabib.com",
+                "khalilullah@bankalhabib.com",
+                "muhammad.khalilullah@bankalhabib.com",
+                "aftab.iqbal@sbp.org.pk"
+            ],
+            "Core Services": [
+                "banking",
+                "remittance",
+                "iBanking",
+                "Netbanking",
+                "eCIB",
+                "IBAN",
+                "ATMs",
+                "Debit",
+                "Credit",
+                "Loans",
+                "Investment",
+                "Foreign Exchange",
+                "Trade",
+                "Exporters'",
+                "Import",
+                "Remittances",
+                "Digital Banking",
+                "Mobile Banking",
+                "Online Banking"
+            ],
+            "Features & Benefits": [
+                "24-hours",
+                "seamless",
+                "instantly",
+                "securely",
+                "hassle-free",
+                "convenient",
+                "flexibility",
+                "enhanced",
+                "real-time",
+                "end-to-end",
+                "24/7",
+                "secure",
+                "fast",
+                "reliable",
+                "efficient"
+            ],
+            "Technology & Security": [
+                "Security",
+                "Encryption",
+                "Two-Factor Authentication",
+                "Fraud Detection",
+                "Data Protection",
+                "Privacy",
+                "Compliance",
+                "IT Security",
+                "Cybersecurity"
+            ],
+            "Customer Support & Experience": [
+                "Customer Support",
+                "Help Desk",
+                "Live Chat",
+                "FAQs",
+                "User Guide",
+                "Tutorials",
+                "Feedback",
+                "Complaint Resolution",
+                "Customer Satisfaction"
+            ],
+            "Compliance & Regulation": [
+                "SBP",
+                "AML",
+                "KYC",
+                "FATF",
+                "Sanctions",
+                "Regulatory Compliance",
+                "Audit",
+                "Risk Management"
+            ],
+            "Marketing & Promotion": [
+                "Marketing",
+                "Promotion",
+                "Campaigns",
+                "Branding",
+                "Advertising",
+                "Social Media",
+                "Digital Marketing",
+                "Content Marketing"
+            ],
+            "Location & Accessibility": [
+                "Pakistan",
+                "Karachi",
+                "Lahore",
+                "Islamabad",
+                "Branches",
+                "ATM Locations",
+                "Service Centers",
+                "Regional Offices"
+            ],
+            "Financial Products": [
+                "Accounts",
+                "Deposits",
+                "Loans",
+                "Credit Cards",
+                "Debit Cards",
+                "Prepaid Cards",
+                "Investment Products",
+                "Insurance",
+                "Mutual Funds",
+                "Bonds",
+                "Stocks",
+                "FOREX"
+            ]
+        };
+
+        // Initialize the category display component
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryDisplay = new CategoryDisplay('keywordCategoriesContainer');
+            categoryDisplay.render(sampleCategories);
+        });
+    </script>
+</body>
+</html>

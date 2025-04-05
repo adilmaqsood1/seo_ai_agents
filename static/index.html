@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO AI Agent - Keyword Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/category-display.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#10b981',
+                        dark: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <header class="bg-dark text-white shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold">SEO AI Agent</h1>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="#" class="hover:text-primary transition">Home</a></li>
+                        <li><a href="#" class="hover:text-primary transition">About</a></li>
+                        <li><a href="#" class="hover:text-primary transition">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-12 text-center">
+            <h2 class="text-4xl font-bold text-dark mb-4 gradient-text">AI-Powered SEO Keyword Analysis</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto text-responsive">Enter a website URL to extract and analyze keywords for SEO optimization.</p>
+        </section>
+
+        <section class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 mb-12 card-hover">
+            <form id="crawlForm" class="space-y-4">
+                <div>
+                    <label for="url" class="block text-sm font-medium text-gray-700 mb-1">Website URL</label>
+                    <input type="url" id="url" name="url" placeholder="https://example.com" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary transition">
+                </div>
+                <div class="flex justify-center">
+                    <button type="submit" class="px-6 py-3 bg-primary text-white font-medium rounded-md hover:bg-blue-600 transition flex items-center">
+                        <span>Analyze Keywords</span>
+                        <span id="loadingSpinner" class="ml-2 hidden">
+                            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section id="noResultsSection" class="max-w-3xl mx-auto text-center py-8 mb-12">  
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-8">
+                <svg class="w-16 h-16 mx-auto text-blue-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">No Analysis Results Yet</h3>
+                <p class="text-gray-600 mb-4">Enter a website URL above and click "Analyze Keywords" to see detailed SEO analysis results.</p>
+            </div>
+        </section>
+
+        <section id="resultsSection" class="hidden fade-in">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h3 class="text-2xl font-bold text-dark mb-4">Analysis Results</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-2">Extracted Keywords</h4>
+                        <div id="keywordsList" class="bg-gray-50 p-4 rounded-md max-h-60 overflow-y-auto custom-scrollbar">
+                            <!-- Keywords will be inserted here -->
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-2">Sentiment Analysis</h4>
+                        <div id="sentimentAnalysis" class="bg-gray-50 p-4 rounded-md">
+                            <!-- Sentiment analysis will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <h3 class="text-xl font-bold text-dark mb-4">Keyword Categories</h3>
+                    <div id="categoriesList" class="space-y-4 max-h-[500px] overflow-y-auto custom-scrollbar">
+                        <!-- Categories will be inserted here by the CategoryDisplay component -->
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                    <h3 class="text-xl font-bold text-dark mb-4">SEO Recommendations</h3>
+                    <div id="recommendationsList" class="space-y-4">
+                        <!-- Recommendations will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                <h3 class="text-xl font-bold text-dark mb-4">Next Steps</h3>
+                <ul id="nextStepsList" class="list-disc pl-5 space-y-2">
+                    <!-- Next steps will be inserted here -->
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="text-center">
+                <p>&copy; 2023 SEO AI Agent. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/category-display.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

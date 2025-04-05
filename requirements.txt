@@ -4,3 +4,6 @@ groq
 crawl4ai
 beautifulsoup4
 pydantic
+python-dotenv
+requests
+jinja2
