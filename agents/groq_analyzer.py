@@ -1,12 +1,20 @@
 import groq
+from utils.logger import log_info, log_error
+import json
 
 class GroqKeywordAnalyzer:
     def __init__(self, api_key):
+        if not api_key or api_key.isspace():
+            raise ValueError("GROQ_API_KEY is missing or empty. Please check your environment variables.")
         self.client = groq.Client(api_key=api_key)
 
     def analyze_keywords(self, keywords):
         """Use Groq API to generate a detailed SEO analysis report."""
+        if not keywords or len(keywords) == 0:
+            raise ValueError("No keywords provided for analysis")
+            
         keyword_text = ", ".join(keywords)
+        log_info(f"Analyzing {len(keywords)} keywords with Groq API")
 
         # Define the prompt for Groq
         prompt = f"""
@@ -40,23 +48,45 @@ class GroqKeywordAnalyzer:
         }}
         """
 
-        # Call Groq API
-        response = self.client.chat.completions.create(
-            model="deepseek-r1-distill-llama-70b",  
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful AI trained in SEO and keyword analysis. Analyze the following keywords and provide a detailed SEO report."
-                },
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ],
-            max_tokens=1000
-        )
+        try:
+            # Call Groq API
+            response = self.client.chat.completions.create(
+                model="deepseek-r1-distill-llama-70b",  
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are a helpful AI trained in SEO and keyword analysis. Analyze the following keywords and provide a detailed SEO report."
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                max_tokens=1000
+            )
 
-        # Extract the analysis from the response
-        analysis = response.choices[0].message.content
-        print("Groq API response:", analysis)  # Add logging to see the raw response
-        return analysis
+            # Extract the analysis from the response
+            analysis = response.choices[0].message.content
+            log_info("Successfully received Groq API response")
+            
+            # Validate that the response is valid JSON
+            try:
+                json.loads(analysis)
+            except json.JSONDecodeError:
+                log_error("Groq API returned non-JSON response")
+                # Return a simplified JSON response instead of failing
+                return json.dumps({
+                    "error": "Invalid response format from Groq API",
+                    "raw_keywords": keywords[:10]  # Include some of the keywords for reference
+                })
+                
+            return analysis
+            
+        except Exception as e:
+            error_message = f"Error calling Groq API: {str(e)}"
+            log_error(error_message)
+            # Return a JSON error response instead of raising an exception
+            return json.dumps({
+                "error": error_message,
+                "keywords_count": len(keywords)
+            })
