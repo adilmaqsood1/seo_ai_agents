@@ -4,9 +4,13 @@ import json
 
 class GroqKeywordAnalyzer:
     def __init__(self, api_key):
-        if not api_key or api_key.isspace():
+        if api_key is None or not api_key or api_key.isspace():
             raise ValueError("GROQ_API_KEY is missing or empty. Please check your environment variables.")
-        self.client = groq.Client(api_key=api_key)
+        try:
+            self.client = groq.Client(api_key=api_key)
+        except Exception as e:
+            log_error(f"Failed to initialize Groq client: {str(e)}")
+            raise ValueError(f"Failed to initialize Groq client: {str(e)}")
 
     def analyze_keywords(self, keywords):
         """Use Groq API to generate a detailed SEO analysis report."""
@@ -49,7 +53,7 @@ class GroqKeywordAnalyzer:
         """
 
         try:
-            # Call Groq API
+            # Call Groq API with timeout to prevent hanging in serverless environment
             response = self.client.chat.completions.create(
                 model="deepseek-r1-distill-llama-70b",  
                 messages=[
@@ -62,16 +66,26 @@ class GroqKeywordAnalyzer:
                         "content": prompt
                     }
                 ],
-                max_tokens=1000
+                max_tokens=1000,
+                timeout=30  # Add timeout to prevent hanging in serverless environment
             )
 
             # Extract the analysis from the response
+            if not response or not hasattr(response, 'choices') or len(response.choices) == 0:
+                log_error("Groq API returned empty or invalid response")
+                return json.dumps({
+                    "error": "Empty or invalid response from Groq API",
+                    "keywords_analyzed": len(keywords)
+                })
+                
             analysis = response.choices[0].message.content
             log_info("Successfully received Groq API response")
             
             # Validate that the response is valid JSON
             try:
-                json.loads(analysis)
+                # First check if the response is already valid JSON
+                parsed_json = json.loads(analysis)
+                return json.dumps(parsed_json)  # Ensure we return a properly formatted JSON string
             except json.JSONDecodeError:
                 log_error("Groq API returned non-JSON response")
                 # Return a simplified JSON response instead of failing
@@ -80,13 +94,20 @@ class GroqKeywordAnalyzer:
                     "raw_keywords": keywords[:10]  # Include some of the keywords for reference
                 })
                 
-            return analysis
+            # This line should never be reached, but just in case
+            return json.dumps({"error": "Unknown error processing Groq API response"})
             
         except Exception as e:
             error_message = f"Error calling Groq API: {str(e)}"
             log_error(error_message)
             # Return a JSON error response instead of raising an exception
-            return json.dumps({
-                "error": error_message,
-                "keywords_count": len(keywords)
-            })
+            try:
+                return json.dumps({
+                    "error": error_message,
+                    "keywords_count": len(keywords),
+                    "error_type": type(e).__name__,
+                    "suggestion": "Check your GROQ_API_KEY environment variable and network connectivity"
+                })
+            except:
+                # Absolute fallback in case of any serialization issues
+                return json.dumps({"error": "Critical error in API processing", "status": "failed"})
